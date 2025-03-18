@@ -1,0 +1,10 @@
+{
+  "name": "advanced-calculator",
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "github": {
+    "enabled": true,
+    "silent": true
+  }
+} 

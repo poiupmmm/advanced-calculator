@@ -1,0 +1,496 @@
+/**index.wxss**/
+
+/* 容器样式 */
+.container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  padding: 30rpx;
+  box-sizing: border-box;
+  background-color: #f8f8f8;
+}
+
+/* 移动设备响应式布局 */
+.container.mobile {
+  flex-direction: column;
+}
+
+/* 左侧选项面板 */
+.options-panel {
+  width: 40%;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.container.mobile .options-panel {
+  width: 100%;
+  margin-bottom: 30rpx;
+}
+
+/* 添加选项区域 */
+.add-option {
+  display: flex;
+  margin-bottom: 30rpx;
+}
+
+.option-input {
+  flex: 1;
+  height: 80rpx;
+  border: 2rpx solid #eee;
+  border-radius: 40rpx;
+  padding: 0 30rpx;
+  font-size: 28rpx;
+  background-color: #fff;
+  margin-right: 20rpx;
+}
+
+.add-btn {
+  width: 160rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 28rpx;
+  color: #fff;
+  background: linear-gradient(90deg, #FF9500, #FF5E3A);
+  border-radius: 40rpx;
+  padding: 0;
+}
+
+/* 按钮悬停效果 */
+.btn-hover {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+/* 选项列表 */
+.options-list {
+  background-color: #fff;
+  border-radius: 20rpx;
+  padding: 20rpx;
+  margin-bottom: 30rpx;
+  max-height: 600rpx;
+  overflow-y: auto;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+
+.list-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+  color: #333;
+  border-bottom: 2rpx solid #f5f5f5;
+  padding-bottom: 10rpx;
+}
+
+.empty-tip {
+  text-align: center;
+  color: #999;
+  font-size: 28rpx;
+  padding: 40rpx 0;
+}
+
+.option-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 2rpx solid #f5f5f5;
+}
+
+.option-text {
+  font-size: 30rpx;
+  color: #333;
+}
+
+.delete-btn {
+  width: 60rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  text-align: center;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  color: #FF5E3A;
+  font-size: 40rpx;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.delete-btn-hover {
+  animation: shake 0.3s ease-in-out;
+  background-color: #ffebee;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5rpx); }
+  40%, 80% { transform: translateX(5rpx); }
+}
+
+/* 重置按钮 */
+.reset-btn {
+  width: 100%;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 28rpx;
+  color: #666;
+  background-color: #f5f5f5;
+  border-radius: 40rpx;
+}
+
+/* 右侧转盘面板 */
+.wheel-panel {
+  width: 60%;
+  padding: 20rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container.mobile .wheel-panel {
+  width: 100%;
+}
+
+/* 转盘容器 */
+.wheel-container {
+  position: relative;
+  width: 600rpx;
+  height: 600rpx;
+  margin: 20rpx 0 40rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 转盘标题 */
+.wheel-title {
+  position: absolute;
+  top: -50rpx;
+  width: 100%;
+  text-align: center;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 转盘包装器 */
+.wheel-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: 0 0 30rpx rgba(0, 0, 0, 0.1);
+  border: 12rpx solid #8ed100; /* 绿色外边框，像参考图一样 */
+  transition: filter 0.3s ease;
+  background-color: #ffffff;
+  overflow: hidden;
+  /* 性能优化: 硬件加速 */
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* 转盘旋转时的模糊效果 */
+.wheel-wrapper.spinning {
+  filter: blur(1rpx);
+}
+
+/* 扇形片段 */
+.wheel-sector {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
+  overflow: hidden;
+}
+
+/* 扇形内容 */
+.sector-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  transform-origin: center;
+  pointer-events: none;
+}
+
+/* 所有选项的不同定位 */
+.sector-content .content-inner {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 120rpx;
+  top: 80rpx;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* 大扇形和小扇形的不同样式 */
+.sector-large .content-inner {
+  top: 80rpx;
+}
+
+.sector-large .food-icon {
+  width: 80rpx;
+  height: 80rpx;
+}
+
+.sector-large .sector-text {
+  max-width: 160rpx;
+  font-size: 36rpx;
+  margin-top: 10rpx;
+}
+
+.sector-small .content-inner {
+  top: 60rpx;
+}
+
+.sector-small .food-icon {
+  width: 60rpx;
+  height: 60rpx;
+}
+
+.sector-small .sector-text {
+  max-width: 120rpx;
+  font-size: 28rpx;
+  margin-top: 5rpx;
+}
+
+/* 食物图标 */
+.food-icon {
+  width: 70rpx;
+  height: 70rpx;
+  filter: drop-shadow(0 2rpx 4rpx rgba(0,0,0,0.3));
+}
+
+/* 扇形文字 */
+.sector-text {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.7);
+  max-width: 120rpx;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 扇形白色边框 */
+.sector-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 0 50% 50% 0;
+  border-right: 3rpx solid white;
+  transform-origin: center left;
+  pointer-events: none;
+}
+
+/* 中心圆 */
+.wheel-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background-color: #333;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.5);
+  border: 8rpx solid white;
+  z-index: 10;
+}
+
+/* 指针 */
+.pointer {
+  position: absolute;
+  top: -10rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 20rpx solid transparent;
+  border-right: 20rpx solid transparent;
+  border-bottom: 50rpx solid #333;
+  filter: drop-shadow(0 2rpx 4rpx rgba(0,0,0,0.3));
+  z-index: 20;
+}
+
+/* 开始按钮 */
+.spin-btn {
+  width: 300rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+  text-align: center;
+  border-radius: 45rpx;
+  margin: 20rpx 0 40rpx;
+  font-size: 32rpx;
+  color: #fff;
+  background: linear-gradient(90deg, #FF9500, #FF5E3A);
+  box-shadow: 0 6rpx 20rpx rgba(255, 94, 58, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.spin-btn.spinning {
+  opacity: 0.7;
+  background: linear-gradient(90deg, #ccc, #999);
+  box-shadow: none;
+}
+
+/* 粒子效果容器 */
+.particles-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 30;
+}
+
+/* 粒子 */
+.particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  background-color: gold;
+  opacity: 0;
+  animation: particle 1.5s ease-out forwards;
+}
+
+/* 生成12个不同角度的粒子 */
+.particle:nth-child(1) { transform: rotate(0deg) translateY(-200rpx); }
+.particle:nth-child(2) { transform: rotate(30deg) translateY(-200rpx); }
+.particle:nth-child(3) { transform: rotate(60deg) translateY(-200rpx); }
+.particle:nth-child(4) { transform: rotate(90deg) translateY(-200rpx); }
+.particle:nth-child(5) { transform: rotate(120deg) translateY(-200rpx); }
+.particle:nth-child(6) { transform: rotate(150deg) translateY(-200rpx); }
+.particle:nth-child(7) { transform: rotate(180deg) translateY(-200rpx); }
+.particle:nth-child(8) { transform: rotate(210deg) translateY(-200rpx); }
+.particle:nth-child(9) { transform: rotate(240deg) translateY(-200rpx); }
+.particle:nth-child(10) { transform: rotate(270deg) translateY(-200rpx); }
+.particle:nth-child(11) { transform: rotate(300deg) translateY(-200rpx); }
+.particle:nth-child(12) { transform: rotate(330deg) translateY(-200rpx); }
+
+/* 粒子动画 */
+@keyframes particle {
+  0% { opacity: 1; width: 0; height: 0; }
+  50% { opacity: 0.7; width: 20rpx; height: 20rpx; }
+  100% { opacity: 0; transform: rotate(var(--angle)) translateY(-280rpx); }
+}
+
+/* 艺术字体的动画效果 */
+@keyframes textGlow {
+  0%, 100% { text-shadow: 0 0 5rpx rgba(255, 255, 255, 0.8); }
+  50% { text-shadow: 0 0 15rpx rgba(255, 255, 255, 1); }
+}
+
+.text-animated {
+  animation: textGlow 2s infinite;
+}
+
+/* 历史记录容器 */
+.history-container {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 20rpx;
+  padding: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+
+.history-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+  color: #333;
+  border-bottom: 2rpx solid #f5f5f5;
+  padding-bottom: 10rpx;
+}
+
+.history-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+}
+
+.history-item {
+  background-color: #f5f5f5;
+  border-radius: 10rpx;
+  padding: 15rpx 20rpx;
+  font-size: 28rpx;
+  color: #666;
+  position: relative;
+}
+
+.history-item.latest {
+  background-color: #fff8e1;
+  color: #ff9800;
+  font-weight: bold;
+  box-shadow: 0 2rpx 8rpx rgba(255, 152, 0, 0.2);
+}
+
+.history-badge {
+  position: absolute;
+  top: -10rpx;
+  right: -10rpx;
+  background-color: #ff5722;
+  color: #fff;
+  font-size: 20rpx;
+  padding: 2rpx 8rpx;
+  border-radius: 10rpx;
+}
+
+/* 调试信息样式 */
+.sector-debug {
+  position: absolute;
+  bottom: 40rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5rpx 10rpx;
+  border-radius: 10rpx;
+  font-size: 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 100;
+}
+
+/* 调试触发器 */
+.debug-trigger {
+  height: 50rpx;
+  width: 100%;
+  position: relative;
+  margin-top: 20rpx;
+}
+
+/* 调试指示器 */
+.debug-indicator {
+  position: absolute;
+  bottom: 10rpx;
+  right: 10rpx;
+  background-color: rgba(255, 0, 0, 0.6);
+  color: white;
+  font-size: 20rpx;
+  padding: 5rpx 10rpx;
+  border-radius: 10rpx;
+} 

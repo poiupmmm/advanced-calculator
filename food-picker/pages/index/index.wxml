@@ -1,0 +1,107 @@
+<!--index.wxml-->
+<view class="container {{isMobile ? 'mobile' : ''}}">
+  <!-- 左侧选项面板 -->
+  <view class="options-panel">
+    <!-- 添加选项区域 -->
+    <view class="add-option">
+      <input class="option-input" placeholder="请输入食物名称" value="{{newOption}}" bindinput="onInputChange" />
+      <button class="add-btn" hover-class="btn-hover" bindtap="addOption">添加</button>
+    </view>
+    
+    <!-- 选项列表 -->
+    <view class="options-list">
+      <view class="list-title">当前选项</view>
+      <block wx:if="{{options.length === 0}}">
+        <view class="empty-tip">暂无选项，请添加</view>
+      </block>
+      <block wx:else>
+        <view wx:for="{{options}}" wx:key="index" class="option-item">
+          <text class="option-text">{{item}}</text>
+          <view class="delete-btn" hover-class="delete-btn-hover" bindtap="removeOption" data-index="{{index}}">×</view>
+        </view>
+      </block>
+    </view>
+    
+    <!-- 重置按钮 -->
+    <button class="reset-btn" hover-class="btn-hover" bindtap="resetOptions">重置选项</button>
+  </view>
+  
+  <!-- 右侧转盘面板 -->
+  <view class="wheel-panel">
+    <!-- 转盘容器 -->
+    <view class="wheel-container">
+      <view class="wheel-title">食物抽奖转盘</view>
+      
+      <!-- 转盘 - 使用微信小程序动画API -->
+      <view class="wheel-wrapper {{isSpinning ? 'spinning' : ''}}" animation="{{wheelAnimation}}">
+        <!-- 多彩扇形 - 性能优化版本 -->
+        <block wx:if="{{options.length > 0}}">
+          <!-- 添加旋转角度和方向的调试注释 -->
+          <!-- 扇形是从上方开始逆时针布局，转盘是顺时针旋转 -->
+          <!-- 性能优化：使用wx:for的索引优化 -->
+          <view wx:for="{{sectors}}" wx:key="index"
+                class="wheel-sector {{options.length <= 6 ? 'sector-large' : 'sector-small'}}"
+                style="background-color:{{item.color}};transform:rotate({{item.startAngle}}deg);clip-path:{{item.clipPath}};-webkit-clip-path:{{item.clipPath}}">
+                
+            <!-- 添加扇区信息调试标记 -->
+            <view class="sector-debug" wx:if="{{debugMode}}">
+              <text>{{index}}: {{item.name}}</text>
+              <text>角度: {{item.startAngle}}</text>
+            </view>
+                       
+            <!-- 优化：仅在需要时添加边框 -->
+            <view wx:if="{{options.length > 2}}" class="sector-border" style="transform:rotate({{item.angle}}deg)"></view>
+            
+            <!-- 扇形内容 - 优化：使用transform代替复杂计算 -->
+            <view class="sector-content" style="transform:rotate({{item.angle / 2}}deg)">
+              <view class="content-inner">
+                <!-- 优化：使用条件编译减少不必要的节点 -->
+                <block wx:if="{{item.iconType === 'icon'}}">
+                  <image class="food-icon" src="{{item.iconUrl}}" mode="aspectFit"></image>
+                </block>
+                <text class="sector-text" style="{{item.textStyle}}">{{item.name}}</text>
+              </view>
+            </view>
+          </view>
+        </block>
+      </view>
+      
+      <!-- 中心圆 -->
+      <view class="wheel-center"></view>
+      
+      <!-- 指针 -->
+      <view class="pointer"></view>
+      
+      <!-- 粒子效果容器 - 优化：仅在需要时渲染 -->
+      <view class="particles-container" wx:if="{{showParticles}}">
+        <view wx:for="{{[0,1,2,3,4,5,6,7,8,9,10,11]}}" wx:key="*this" class="particle" style="--angle:{{item * 30}}deg"></view>
+      </view>
+    </view>
+    
+    <!-- 开始按钮 -->
+    <button class="spin-btn {{isSpinning ? 'spinning' : ''}}" hover-class="{{!isSpinning ? 'btn-hover' : ''}}" bindtap="startSpin" disabled="{{isSpinning}}">
+      {{isSpinning ? '抽奖中...' : '开始抽奖'}}
+    </button>
+    
+    <!-- 历史记录 -->
+    <view class="history-container">
+      <view class="history-title">历史记录</view>
+      <view class="history-list">
+        <block wx:if="{{history.length === 0}}">
+          <view class="empty-tip">暂无记录</view>
+        </block>
+        <block wx:else>
+          <view wx:for="{{history}}" wx:key="index" class="history-item {{index === 0 ? 'latest' : ''}}">
+            {{item}}
+            <view wx:if="{{index === 0}}" class="history-badge">新</view>
+          </view>
+        </block>
+      </view>
+    </view>
+    
+    <!-- 调试模式切换按钮（隐藏） -->
+    <view class="debug-trigger" bindlongpress="toggleDebugMode">
+      <text wx:if="{{debugMode}}" class="debug-indicator">调试模式已开启</text>
+    </view>
+  </view>
+</view> 
